@@ -47,10 +47,12 @@ export async function createNote(req, res) {
     try {
         const { title, content } = req.body;
 
-        if (!title?.trim() || !content?.trim()) {
-            return res.status(400).json({
-                message: "Title and content are required",
-            });
+        if (typeof title !== "string" || typeof content !== "string") {
+            return res.status(400).json({ message: "Title and content must be strings" });
+        }
+
+        if (!title.trim() || !content.trim()) {
+            return res.status(400).json({ message: "Title and content are required" });
         }
 
         const note = new Note({
@@ -81,11 +83,13 @@ export async function updateNote(req, res) {
             });
         }
 
-        if (!title?.trim() || !content?.trim()) {
-            return res.status(400).json({
-                message: "Title and content are required",
-            });
+        if (typeof title !== "string" || typeof content !== "string") {
+            return res.status(400).json({ message: "Title and content must be strings" });
         }
+        if (!title.trim() || !content.trim()) {
+            return res.status(400).json({ message: "Title and content are required" });
+        }
+     
 
         const updatedNote = await Note.findByIdAndUpdate(
             id,
